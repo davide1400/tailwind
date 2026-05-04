@@ -3,6 +3,6 @@
 
 @theme {
   --font-sans: ui-sans-serif, system-ui, sans-serif;
- --color-background: var(--color-gray-300);
+  --color-background: var(--color-gray-300);
 }
 
