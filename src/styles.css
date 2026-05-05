@@ -6,3 +6,5 @@
   --color-background: var(--color-gray-300);
 }
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+

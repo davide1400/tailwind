@@ -1,9 +1,13 @@
-<div class="container bg-clip-text">
-  <div class="bg-background h-screen w-screen">
-    <p class="font-sans text-3xl">
-      Sono un bellissimo paragrafo
-    </p>
+  <div class="container bg-clip-text">
+    <div class="h-screen w-screen bg-linear-to-t from-gray-400 via-gray-300 to-gray-100
+    dark:to-sky-950 dark:via-sky-950 dark:from-sky-900">
+      <div class="grid grid-flow-col justify-items-end">
+        <button class="p-3 bg-sky-800 rounded rounded-2 mt-2 mr-2 text-white bg-gradient
+        cursor-pointer hover:bg-sky-900" (click)="switchTheme()">
+          Cambia Tema
+        </button>
+      </div>
+    </div>
   </div>
-</div>
 
 <router-outlet></router-outlet> 
