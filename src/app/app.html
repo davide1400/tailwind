@@ -13,10 +13,13 @@
   </div>
 
   <!-- Header -->
-  <app-header></app-header>
+  <app-header  class="sticky top-0 z-50"></app-header>
 
   <!-- Pagine figlie. Con flex-1 si dice al main di prendere tutto lo spazio del contenuto e spinge il footer in basso -->
-  <main class="flex-1">
+  <main class="flex-1 min-h-screen bg-zinc-900">
+    <app-asta-live></app-asta-live>
+
+    <app-cards></app-cards>
     <router-outlet></router-outlet>
   </main>
 
