@@ -1,0 +1,53 @@
+<header class="sticky top-0 z-50 bg-zinc-900/80 backdrop-blur-sm border-b border-zinc-800">
+    <div class="container mx-auto">
+        <div class="flex items-center justify-between">
+            <a href="#" class="p-10 text-white relative">
+                <fa-icon class="text-3xl" [icon]="faBall"></fa-icon>
+            </a>
+            <div class="hidden lg:flex lg:items-center lg:space-x-8">
+
+                <div class="relative group">
+                    <a class="text-zinc-400 text-sm transition-colors hover:text-zinc-100" href="#">
+                        Asta Live
+                        <fa-icon [icon]="faGavel"></fa-icon>
+                    </a>
+
+                    <!--Tooltip-->
+                    <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                        whitespace-nowrap bg-black text-white text-xs px-2 py-1 rounded
+                        opacity-0 group-hover:opacity-100 transition">
+                        Vai alla sezione Asta
+                    </span>
+                </div>
+
+                <div class="relative group">
+                    <a class="text-zinc-400 text-sm transition-colors hover:text-zinc-100" href="#">
+                        Svincolati
+                        <fa-icon [icon]="faUsers"></fa-icon>
+                    </a>
+                </div>
+
+                <div class="relative group">
+                    <a class="text-zinc-400 text-sm transition-colors hover:text-zinc-100" href="#">
+                        Vedi Rosa
+                        <fa-icon [icon]="faPeopleGroup"></fa-icon>
+                    </a>
+                </div>
+            </div>
+
+            <!--Login-->
+            <div class="hidden lg:flex lg:items-center lg:space-x-8">
+                <a class="inline-flex items-center px-4 py-2 text-sm 
+            font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors" href="">
+                    Accedi
+                </a>
+
+                <!-- Cambio tema-->
+                <a class="relative p-2 text-zinc-400 hover:text-zinc-100 transition-colors" (click)="switchTheme()"
+                    href="">
+                    <fa-icon [icon]="faPalette"></fa-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>

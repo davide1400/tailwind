@@ -1,13 +1,28 @@
-  <div class="container bg-clip-text">
-    <div class="h-screen w-screen bg-linear-to-t from-gray-400 via-gray-300 to-gray-100
-    dark:to-sky-950 dark:via-sky-950 dark:from-sky-900">
-      <div class="grid grid-flow-col justify-items-end">
-        <button class="p-3 bg-sky-800 rounded rounded-2 mt-2 mr-2 text-white bg-gradient
-        cursor-pointer hover:bg-sky-900" (click)="switchTheme()">
-          Cambia Tema
-        </button>
+<!--flex mette gli elementi in orizzontale e poi con flex-col li dispone in colonna-->
+<div class="min-h-screen flex flex-col bg-linear-to-t from-gray-400 via-gray-300 to-gray-100
+    dark:to-zinc-800 dark:via-zinc-900 dark:from-zinc-800 ">
+
+  <div class="bg-linear-to-r from-blue-800 to-blue-600">
+    <div class="container mx-auto">
+      <div class="flex items-center justify-center py-2 text-sm text-white flex-wrap gap-x-3 gap-y-1">
+        <span>
+          FantaCalcio
+        </span>
       </div>
     </div>
   </div>
 
-<router-outlet></router-outlet> 
+  <!-- Header -->
+  <app-header></app-header>
+
+  <!-- Pagine figlie. Con flex-1 si dice al main di prendere tutto lo spazio del contenuto e spinge il footer in basso -->
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+  
+
+</div>
