@@ -1,13 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Header } from './core/header/header';
 import { Footer } from './core/footer/footer';
-import { AstaLive } from './pages/asta-live/asta-live';
-import { Cards } from './pages/asta-live/cards/cards';
+import { Header } from './core/header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Footer, AstaLive, Cards],
+  imports: [RouterOutlet, Header, Footer],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

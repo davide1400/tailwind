@@ -2,30 +2,14 @@
 <div class="min-h-screen flex flex-col bg-linear-to-t from-gray-400 via-gray-300 to-gray-100
     dark:to-zinc-800 dark:via-zinc-900 dark:from-zinc-800 ">
 
-  <div class="bg-linear-to-r from-blue-800 to-blue-600">
-    <div class="container mx-auto">
-      <div class="flex items-center justify-center py-2 text-sm text-white flex-wrap gap-x-3 gap-y-1">
-        <span>
-          FantaCalcio
-        </span>
-      </div>
-    </div>
-  </div>
-
   <!-- Header -->
   <app-header  class="sticky top-0 z-50"></app-header>
 
   <!-- Pagine figlie. Con flex-1 si dice al main di prendere tutto lo spazio del contenuto e spinge il footer in basso -->
   <main class="flex-1 min-h-screen bg-zinc-900">
-    <app-asta-live></app-asta-live>
-
-    <app-cards></app-cards>
     <router-outlet></router-outlet>
   </main>
-
+  
   <!-- Footer -->
   <app-footer></app-footer>
-
-  
-
 </div>
