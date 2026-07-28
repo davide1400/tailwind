@@ -7,10 +7,12 @@ export const routes: Routes = [
 
     {
         path: "",
+        //Pagina wrapper che contiene il router-outlet
         component: Layout,
         children: [
             {
                 path: "",
+                //di conseguenza viene caricata l'home-page
                 component: HomePage
             },
             {
