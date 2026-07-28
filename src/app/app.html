@@ -2,12 +2,14 @@
 <div class="min-h-screen flex flex-col bg-linear-to-t from-gray-400 via-gray-300 to-gray-100
     dark:to-zinc-800 dark:via-zinc-900 dark:from-zinc-800 ">
 
-  <button (click)="signWithGoogle()">
+  <!-- <button (click)="signWithGoogle()">
     Login
-  </button>
+  </button> -->
 
   <!-- Header -->
+  @if(!headerNascosto()){
   <app-header class="sticky top-0 z-50"></app-header>
+  }
 
   <!-- Pagine figlie. Con flex-1 si dice al main di prendere tutto lo spazio del contenuto e spinge il footer in basso -->
   <main class="flex-1 min-h-screen bg-zinc-900">

@@ -1,0 +1,104 @@
+<div class="relative mx-auto w-full max-w-2xl">
+    <div class="pointer-events-none absolute inset-0 -z-10 rounded-4xl bg-[#d4af37]/25 blur-2xl" aria-hidden="true">
+    </div>
+
+    <div class="player-ticket w-2xl relative flex flex-col items-center gap-4 border border-white/10 bg-[#0f2b21] px-8 py-10 text-center shadow-2xl"
+        [ngClass]="ruoloConfig[giocatore().ruolo].glow">
+        <span class="rounded-full px-4 py-1 text-xs font-bold uppercase tracking-[0.2em]"
+            [ngClass]="ruoloConfig[giocatore().ruolo].badge">
+            {{ ruoloConfig[giocatore().ruolo].label }}
+        </span>
+
+        <div class="space-y-1">
+            <p class="text-sm font-medium uppercase tracking-[0.3em] text-emerald-200/60">
+                {{ giocatore().squadra || 'Svincolato' }}
+            </p>
+            <h2 class="text-3xl font-extrabold uppercase tracking-tight text-white sm:text-4xl">{{ giocatore().nome }}
+            </h2>
+            <h2 class="text-3xl font-extrabold uppercase tracking-tight text-[#d4af37] sm:text-4xl">{{
+                giocatore().cognome }}</h2>
+        </div>
+
+        <div class="my-2 h-px w-2/3 bg-white/10"></div>
+
+        @if (errore()) {
+        <p class="rounded-lg bg-rose-600/20 px-3 py-2 text-sm font-medium text-rose-300">{{ errore() }}</p>
+        }
+
+        @switch (fase()) {
+        @case ('iniziale') {
+        <div class="flex w-full gap-3">
+            <button type="button" (click)="onScartaClick()"
+                class="flex-1 rounded-xl bg-[#c0453b] px-4 py-3 font-bold uppercase tracking-wide text-white transition hover:bg-[#a53a31] active:scale-[0.98] cursor-pointer">
+                Scarta
+            </button>
+            <button type="button" (click)="onAssegnaClick()"
+                class="flex-1 rounded-xl bg-[#d4af37] px-4 py-3 font-bold uppercase tracking-wide text-[#0f2b21] transition hover:bg-[#c29d2b] active:scale-[0.98] cursor-pointer">
+                Assegna
+            </button>
+        </div>
+        }
+
+        @case ('scegli-squadra') {
+        <div class="w-full">
+            <div class="mb-3 flex items-center justify-between">
+                <p class="text-sm font-semibold uppercase tracking-wide text-emerald-200/70">Scegli il fantallenatore
+                </p>
+                <button type="button" (click)="onAnnullaSelezioneSquadra()"
+                    class="text-sm font-medium text-emerald-200/60 underline-offset-2 hover:underline cursor-pointer">
+                    Annulla
+                </button>
+            </div>
+            <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                @for (coach of coaches(); track coach.id) {
+                <button type="button" (click)="onSelezionaSquadra(coach)" [disabled]="coach.creditiResidui <= 0"
+                    class="flex flex-col items-center gap-0.5 rounded-lg bg-white/5 px-2 py-2 text-xs font-semibold text-white transition hover:bg-[#d4af37] hover:text-[#0f2b21] 
+                    active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white/5 disabled:hover:text-white cursor-pointer">
+                    <span class="truncate">{{ coach.nome }}</span>
+                    <span class="text-[10px] font-normal opacity-70">{{ coach.creditiResidui }} cr</span>
+                </button>
+                }
+            </div>
+        </div>
+        }
+
+        @case ('inserisci-crediti') {
+        @if (squadraSelezionata(); as squadra) {
+        <div class="w-full space-y-3">
+            <div class="flex items-center justify-between">
+                <p class="text-sm font-semibold uppercase tracking-wide text-emerald-200/70">
+                    {{ squadra.nome }} <span class="opacity-60">· residuo {{ squadra.creditiResidui }} cr</span>
+                </p>
+            </div>
+
+            <label class="block text-left">
+                <span class="mb-1 block text-xs font-semibold uppercase tracking-wide text-emerald-200/60">
+                    Crediti spesi
+                </span>
+                <input type="number" min="0" [max]="squadra.creditiResidui" step="1" [value]="creditiInseriti()"
+                    (input)="onCreditiChange($event)" placeholder="Es. 45"
+                    class="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-lg font-bold text-white outline-none focus:border-[#d4af37]" />
+            </label>
+
+            @if (erroreCrediti()) {
+            <p class="text-sm font-medium text-rose-300">{{ erroreCrediti() }}</p>
+            }
+
+            <div class="flex w-full gap-2">
+                <button type="button" (click)="onAnnullaCrediti()"
+                    class="flex-1 text-sm font-medium bg-gray-500 text-white underline-offset-2 hover:bg-gray-600 rounded-xl cursor-pointer uppercase">
+                    Indietro
+                </button>
+                <button type="button" (click)="onConfermaAssegnazione()" [disabled]="!confermaAbilitata()"
+                    class="flex-1 w-full rounded-xl bg-[#d4af37] px-4 py-3 font-bold uppercase tracking-wide cursor-pointer
+                    text-[#0f2b21] transition hover:bg-[#c29d2b] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40">
+                    Conferma assegnazione
+                </button>
+            </div>
+
+        </div>
+        }
+        }
+        }
+    </div>
+</div>

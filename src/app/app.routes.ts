@@ -17,7 +17,10 @@ export const routes: Routes = [
             },
             {
                 path: "asta/live",
-                component: AstaLive
+                component: AstaLive,
+                data: {
+                    nascondiMenu: true,
+                }
             }
         ]
     }

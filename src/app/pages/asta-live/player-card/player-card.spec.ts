@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AstaLive } from './asta-live';
 
+import { PlayerCard } from './player-card';
 
-describe('AstaLive', () => {
-  let component: AstaLive;
-  let fixture: ComponentFixture<AstaLive>;
+describe('PlayerCard', () => {
+  let component: PlayerCard;
+  let fixture: ComponentFixture<PlayerCard>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AstaLive]
+      imports: [PlayerCard]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AstaLive);
+    fixture = TestBed.createComponent(PlayerCard);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AstaLive } from './asta-live';
 
+import { TeamTable } from './team-table';
 
-describe('AstaLive', () => {
-  let component: AstaLive;
-  let fixture: ComponentFixture<AstaLive>;
+describe('TeamTable', () => {
+  let component: TeamTable;
+  let fixture: ComponentFixture<TeamTable>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AstaLive]
+      imports: [TeamTable]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AstaLive);
+    fixture = TestBed.createComponent(TeamTable);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
