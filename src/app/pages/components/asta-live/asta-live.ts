@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PlayerCard } from './player-card/player-card';
 import { TeamTable } from './team-table/team-table';
-import { AstaSetupModal } from '../components/asta-setup-modal/asta-setup-modal';
-import { AstaService } from '../../service/asta.service';
+import { AstaSetupModal } from '../asta-setup-modal/asta-setup-modal';
+import { AstaService } from '../../../service/asta.service';
 import { AssegnazionePayload, AstaConfig, TipoSlot } from './model/player.model';
 
 

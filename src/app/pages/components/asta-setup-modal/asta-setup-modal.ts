@@ -1,6 +1,6 @@
 import { Component, computed, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AstaConfig, CREDITI_OPZIONI, PARTECIPANTI_MAX, PARTECIPANTI_MIN, TipoAsta } from '../../asta-live/model/player.model';
+import { AstaConfig, CREDITI_OPZIONI, PARTECIPANTI_MAX, PARTECIPANTI_MIN, TipoAsta } from '../asta-live/model/player.model';
 
 
 type Step = 1 | 2 | 3;

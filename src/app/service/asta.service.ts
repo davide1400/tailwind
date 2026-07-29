@@ -1,7 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { PlayersRepository } from './players-repository.service';
-import { AstaConfig, Coach, Player, RosterSlot, SLOT_ALTRI, SLOT_PORTIERI, TeamRoster, TipoAsta, TipoSlot } from '../pages/asta-live/model/player.model';
-import { giocaComePortiere, ruoloClassicoDi } from '../pages/asta-live/data/ruoli';
+import { AstaConfig, Coach, Player, RosterSlot, SLOT_ALTRI, SLOT_PORTIERI, TeamRoster, TipoAsta, TipoSlot } from '../pages/components/asta-live/model/player.model';
+import { giocaComePortiere, ruoloClassicoDi } from '../pages/components/asta-live/data/ruoli';
 
 function creaRosterVuoto(coachId: number): TeamRoster {
     return {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Player } from '../pages/asta-live/model/player.model';
-import { MOCK_PLAYERS } from '../pages/asta-live/mock/mock-player';
+import { Player } from '../pages/components/asta-live/model/player.model';
+import { MOCK_PLAYERS } from '../pages/components/asta-live/mock/mock-player';
 
 
 /**
