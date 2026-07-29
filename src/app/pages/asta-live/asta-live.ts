@@ -1,10 +1,11 @@
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
-import { AstaService } from '../../service/asta.service';
-import { AstaSetupModal } from '../components/asta-setup-modal/asta-setup-modal';
-import { AssegnazionePayload, AstaConfig, TipoSlot } from './model/player.model';
+import { Router } from '@angular/router';
 import { PlayerCard } from './player-card/player-card';
 import { TeamTable } from './team-table/team-table';
+import { AstaSetupModal } from '../components/asta-setup-modal/asta-setup-modal';
+import { AstaService } from '../../service/asta.service';
+import { AssegnazionePayload, AstaConfig, TipoSlot } from './model/player.model';
 
 
 function formattaDurata(ms: number): string {
@@ -30,11 +31,23 @@ const COLONNE_GRIGLIA: Record<number, string> = {
   imports: [CommonModule, PlayerCard, TeamTable, AstaSetupModal],
   templateUrl: './asta-live.html',
   styleUrl: './asta-live.css',
+  // STEP 6a: PUNTO CHIAVE. Con questo "providers", Angular crea una NUOVA istanza di
+  // AstaService ogni volta che questo componente viene istanziato (cioè ogni volta che
+  // il Router attiva la rotta /asta), invece di riusare quella globale dell'app.
+  // Quando il componente viene distrutto (navighi via), la sua istanza di AstaService
+  // viene distrutta con esso: tutta l'asta precedente sparisce davvero dalla memoria.
+  providers: [AstaService],
 })
-export class AstaLive {
+export class AstaLive implements OnInit {
   protected readonly asta = inject(AstaService);
+  private readonly router = inject(Router);
+
   protected readonly mostraSvincolati = signal(false);
   protected readonly mostraModaleSetup = signal(false);
+
+  // STEP 6b: stato per la modale di conferma del bottone "Indietro".
+  protected readonly mostraModaleIndietro = signal(false);
+
   private readonly ora = signal(Date.now());
 
   protected readonly durataFormattata = computed(() => {
@@ -48,7 +61,6 @@ export class AstaLive {
     return COLONNE_GRIGLIA[n] ?? 'lg:grid-cols-4';
   });
 
-  /** Fallback 'classic' solo per soddisfare il tipo prima che l'asta parta davvero. */
   protected readonly tipoAstaAttuale = computed(() => this.asta.tipoAsta() ?? 'classic');
 
   constructor() {
@@ -61,6 +73,9 @@ export class AstaLive {
       this.ora.set(Date.now());
     }, 1000);
     destroyRef.onDestroy(() => clearInterval(timerId));
+  }
+  ngOnInit(): void {
+    this.onApriSetup();
   }
 
   protected onApriSetup(): void {
@@ -101,5 +116,26 @@ export class AstaLive {
     link.download = `asta-fantacalcio-${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
     URL.revokeObjectURL(url);
+  }
+
+  // STEP 6c: bottone "Indietro" -> apre la modale di conferma, non naviga subito.
+  protected onIndietroClick(): void {
+    this.mostraModaleIndietro.set(true);
+  }
+
+  protected onBackHome(): void {
+    this.mostraModaleIndietro.set(true);
+  }
+
+  protected onAnnullaIndietro(): void {
+    this.mostraModaleIndietro.set(false);
+  }
+
+  // STEP 6d: conferma -> reset esplicito (difensivo, vedi spiegazione) + navigazione via.
+  // ATTENZIONE: sostituisci ['/'] con il path reale della tua home se è diverso.
+  protected onConfermaIndietro(): void {
+    this.asta.reset();
+    this.mostraModaleIndietro.set(false);
+    this.router.navigate(['/']);
   }
 }

@@ -44,7 +44,7 @@ const BASE: BasePlayer[] = [
     // { id: 28, nome: 'Salvatore', cognome: 'Moretti', ruoli: ['Pc'], squadra: 'Rocca Alta', nazionalita: 'ARG' },
     // { id: 29, nome: 'Christian', cognome: 'Neri', ruoli: ['T'], squadra: 'Vertoli', nazionalita: 'ITA' },
     // { id: 30, nome: 'Lorenzo', cognome: 'Vitale', ruoli: ['A'], squadra: 'Ardenza', nazionalita: 'BRA' },
-    // { id: 31, nome: 'Raffaele', cognome: 'Caruso', ruoli: ['W', 'T'], squadra: 'Portovento', nazionalita: 'ITA' },
+    { id: 31, nome: 'Raffaele', cognome: 'Caruso', ruoli: ['W', 'T', 'A'], squadra: 'Portovento', nazionalita: 'ITA' },
     // { id: 32, nome: 'Enrico', cognome: 'Basile', ruoli: ['Pc'], squadra: 'Rocca Alta', nazionalita: 'CRO' },
     // { id: 33, nome: 'Pietro', cognome: 'Ferraro', ruoli: ['Dd'], squadra: 'Vertoli', nazionalita: 'ITA' },
     // { id: 34, nome: 'Jacopo', cognome: 'Cattaneo', ruoli: ['B'], squadra: 'Ardenza', nazionalita: 'ITA' },

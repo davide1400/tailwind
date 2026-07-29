@@ -14,7 +14,7 @@ type Step = 1 | 2 | 3;
 })
 export class AstaSetupModal {
   salva = output<AstaConfig>();
-  annulla = output<void>();
+  backHome = output<void>();
 
   protected readonly creditiOpzioni = CREDITI_OPZIONI;
   protected readonly partecipantiMin = PARTECIPANTI_MIN;
@@ -71,8 +71,8 @@ export class AstaSetupModal {
     else if (this.step() === 3) this.step.set(2);
   }
 
-  protected onAnnulla(): void {
-    this.annulla.emit();
+  protected onBackHome(): void {
+    this.backHome.emit();
   }
 
   protected onSalva(): void {

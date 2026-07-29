@@ -1,17 +1,17 @@
-<div class="relative mx-auto w-full max-w-md">
+<div class="relative mx-auto w-full max-w-xl">
     <div class="pointer-events-none absolute inset-0 -z-10 rounded-4xl bg-blue-400/20 blur-2xl" aria-hidden="true">
     </div>
 
     <div
         class="player-ticket relative flex flex-col gap-5 border border-blue-400/20 bg-blue-950 px-6 py-8 text-center shadow-2xl shadow-blue-900/40">
         <!-- Intestazione: immagine con chip ruoli + info centrali -->
-        <div class="flex items-center gap-4 text-left">
+        <div class="flex items-center gap-4 text-left mx-4">
             <div class="relative shrink-0">
                 <img [src]="giocatore().immagineUrl" [alt]="giocatore().nome + ' ' + giocatore().cognome"
                     class="h-20 w-20 rounded-full border-4 border-white/10 bg-white/5 object-cover" />
                 <div class="absolute -bottom-1.5 left-1/2 flex -translate-x-1/2 gap-1">
                     @for (chip of chipsRuolo(); track chip.codice) {
-                    <span class="rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none shadow"
+                    <span class="rounded-full px-1.5 py-0.7 text-[15px] font-bold uppercase leading-none shadow text-gray-50"
                         [ngClass]="chip.badge">
                         {{ chip.codice }}
                     </span>
@@ -20,10 +20,10 @@
             </div>
 
             <div class="min-w-0 flex-1">
-                <p class="truncate text-xs font-medium uppercase tracking-[0.25em] text-blue-300/70">
+                <p class="truncate text-xs font-bold uppercase tracking-[0.25em] text-white text-center mb-3">
                     {{ giocatore().squadra }}
                 </p>
-                <div class="flex items-baseline gap-2">
+                <div class="flex items-baseline gap-2 justify-center">
                     <h2 class="truncate text-xl font-extrabold uppercase tracking-tight text-white sm:text-2xl">
                         {{ giocatore().nome }} <span class="text-sky-300">{{ giocatore().cognome }}</span>
                     </h2>
@@ -44,11 +44,13 @@
         @case ('iniziale') {
         <div class="flex w-full gap-3">
             <button type="button" (click)="onScartaClick()"
-                class="flex-1 rounded-xl bg-rose-600 px-4 py-3 font-bold uppercase tracking-wide text-white transition hover:bg-rose-500 active:scale-[0.98]">
+                class="flex-1 rounded-xl bg-rose-600 px-4 py-3 font-bold uppercase tracking-wide 
+                text-white transition hover:bg-rose-500 active:scale-[0.98] cursor-pointer">
                 Scarta
             </button>
             <button type="button" (click)="onAssegnaClick()"
-                class="flex-1 rounded-xl bg-blue-600 px-4 py-3 font-bold uppercase tracking-wide text-white transition hover:bg-blue-500 active:scale-[0.98]">
+                class="flex-1 rounded-xl bg-blue-600 px-4 py-3 font-bold uppercase tracking-wide text-white transition
+                hover:bg-blue-500 active:scale-[0.98] cursor-pointer">
                 Assegna
             </button>
         </div>
@@ -59,7 +61,7 @@
             <div class="mb-3 flex items-center justify-between">
                 <p class="text-sm font-semibold uppercase tracking-wide text-blue-200">Scegli il fantallenatore</p>
                 <button type="button" (click)="onAnnullaSelezioneSquadra()"
-                    class="text-sm font-medium text-blue-300/70 underline-offset-2 hover:underline">
+                    class="text-sm font-medium text-blue-300/70 underline-offset-2 hover:underline cursor-pointer">
                     Annulla
                 </button>
             </div>
@@ -97,11 +99,13 @@
             <!-- Conferma (primary, blu) + Indietro (secondary, outline) affiancati -->
             <div class="flex gap-3">
                 <button type="button" (click)="onAnnullaCrediti()"
-                    class="flex-1 rounded-xl border border-white/20 bg-transparent px-4 py-3 font-bold uppercase tracking-wide text-blue-100 transition hover:bg-white/10 active:scale-[0.98]">
+                    class="flex-1 rounded-xl border border-white/20 bg-transparent px-4 py-3 cursor-pointer 
+                    font-bold uppercase tracking-wide text-blue-100 transition hover:bg-white/10 active:scale-[0.98]">
                     Indietro
                 </button>
                 <button type="button" (click)="onConfermaAssegnazione()" [disabled]="!confermaAbilitata()"
-                    class="flex-1 rounded-xl bg-blue-600 px-4 py-3 font-bold uppercase tracking-wide text-white transition hover:bg-blue-500 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40">
+                    class="flex-1 rounded-xl bg-blue-600 px-4 py-3 font-bold uppercase tracking-wide cursor-pointer 
+                    text-white transition hover:bg-blue-500 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40">
                     Conferma assegnazione
                 </button>
             </div>

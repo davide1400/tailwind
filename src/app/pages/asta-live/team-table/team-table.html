@@ -17,12 +17,25 @@
             @for (slot of roster().portieri; track $index) {
             <li class="flex items-center gap-2 px-3 py-1.5 text-sm">
                 <span class="w-4 shrink-0 font-mono text-xs text-blue-400">P{{ $index + 1 }}</span>
+                <!-- Blocco PORTIERI -->
                 @if (slot) {
-                <span class="min-w-0 flex-1 truncate font-semibold text-white">{{ slot.player.nome }} {{
-                    slot.player.cognome }}</span>
+                <!--
+                    STEP 5: contenitore "group relative" SENZA overflow-hidden — serve solo a dare
+                    un riferimento di posizionamento al tooltip e a intercettare l'hover.
+                    Il "title" nativo è un fallback accessibile (screen reader, browser che non
+                    eseguono JS/hover, ecc.); il tooltip custom sotto è quello visibile a schermo.
+                -->
+                <span class="group relative min-w-0 flex-1" [title]="slot.player.nome + ' ' + slot.player.cognome">
+                    <span class="block truncate font-semibold text-white">{{ slot.player.nome }} {{ slot.player.cognome
+                        }}</span>
+                    <span
+                        class="pointer-events-none absolute bottom-full left-0 z-20 mb-1 hidden whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white shadow-lg group-hover:block">
+                        {{ slot.player.nome }} {{ slot.player.cognome }}
+                    </span>
+                </span>
                 <span class="shrink-0 text-[10px] font-semibold text-blue-300">{{ slot.crediti }} cr</span>
                 <button type="button" (click)="apriModaleRimozione('portieri', $index, slot)"
-                    class="shrink-0 rounded p-1 text-blue-400 transition hover:bg-rose-500/10 hover:text-rose-400"
+                    class="shrink-0 rounded p-1 text-blue-400 transition hover:bg-rose-500/10 hover:text-rose-400 cursor-pointer"
                     aria-label="Rimuovi giocatore">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
                         <path fill-rule="evenodd"
@@ -46,15 +59,22 @@
             @for (slot of roster().altri; track $index) {
             <li class="flex items-center gap-2 border-b border-blue-900/60 px-3 py-1.5 text-sm">
                 <span class="w-5 shrink-0 font-mono text-xs text-blue-400">{{ $index + 1 }}</span>
+                <!-- Blocco ALTRI: stessa identica struttura tooltip, solo con in più il badge del ruolo -->
                 @if (slot) {
-                <span class="min-w-0 flex-1 truncate font-semibold text-white">{{ slot.player.nome }} {{
-                    slot.player.cognome }}</span>
+                <span class="group relative min-w-0 flex-1" [title]="slot.player.nome + ' ' + slot.player.cognome">
+                    <span class="block truncate font-semibold text-white">{{ slot.player.nome }} {{ slot.player.cognome
+                        }}</span>
+                    <span
+                        class="pointer-events-none absolute bottom-full left-0 z-20 mb-1 hidden whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white shadow-lg group-hover:block">
+                        {{ slot.player.nome }} {{ slot.player.cognome }}
+                    </span>
+                </span>
                 <span class="shrink-0 text-[10px] font-bold uppercase" [ngClass]="ruoloCompatto(slot).colore">
                     {{ ruoloCompatto(slot).testo }}
                 </span>
                 <span class="shrink-0 text-[10px] font-semibold text-blue-300">{{ slot.crediti }} cr</span>
                 <button type="button" (click)="apriModaleRimozione('altri', $index, slot)"
-                    class="shrink-0 rounded p-1 text-blue-400 transition hover:bg-rose-500/10 hover:text-rose-400"
+                    class="shrink-0 rounded p-1 text-blue-400 transition hover:bg-rose-500/10 hover:text-rose-400 cursor-pointer"
                     aria-label="Rimuovi giocatore">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
                         <path fill-rule="evenodd"
@@ -96,12 +116,12 @@
             </div>
 
             <div class="mt-5 flex gap-3">
-                <button type="button" (click)="chiudiModale()"
-                    class="flex-1 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
+                <button type="button" (click)="chiudiModale()" class="flex-1 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 
+                    transition hover:bg-slate-50 cursor-pointer">
                     Annulla
                 </button>
-                <button type="button" (click)="confermaRimozione()"
-                    class="flex-1 rounded-xl bg-rose-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-rose-500">
+                <button type="button" (click)="confermaRimozione()" class="flex-1 rounded-xl bg-rose-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-rose-500
+                    cursor-pointer">
                     Conferma rimozione
                 </button>
             </div>

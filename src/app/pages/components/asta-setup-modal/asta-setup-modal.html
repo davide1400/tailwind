@@ -1,5 +1,5 @@
-<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" (click)="onAnnulla()">
-    <div class="w-full max-w-lg rounded-2xl bg-white shadow-2xl" (click)="$event.stopPropagation()">
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+    <div class="w-full max-w-4xl rounded-2xl bg-white shadow-xl">
         <div class="border-b border-slate-100 px-6 py-4">
             <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Configura l'asta · Step {{ step()
                 }} di 3</p>
@@ -16,16 +16,14 @@
             <p class="mb-4 text-sm font-semibold text-slate-700">Che tipo di asta vuoi giocare?</p>
             <div class="grid grid-cols-2 gap-3">
                 <button type="button" (click)="onScegliTipo('classic')"
-                    class="rounded-xl border-2 px-4 py-5 text-center transition"
+                    class="rounded-xl border-2 px-4 py-5 text-center transition cursor-pointer"
                     [ngClass]="tipoAsta() === 'classic' ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-slate-300'">
                     <p class="font-bold text-slate-800">Classic</p>
-                    <p class="mt-1 text-xs text-slate-500">Un ruolo per giocatore</p>
                 </button>
                 <button type="button" (click)="onScegliTipo('mantra')"
-                    class="rounded-xl border-2 px-4 py-5 text-center transition"
+                    class="rounded-xl border-2 px-4 py-5 text-center transition cursor-pointer"
                     [ngClass]="tipoAsta() === 'mantra' ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-slate-300'">
                     <p class="font-bold text-slate-800">Mantra</p>
-                    <p class="mt-1 text-xs text-slate-500">Fino a 3 ruoli per giocatore</p>
                 </button>
             </div>
             }
@@ -35,7 +33,7 @@
             <div class="grid grid-cols-3 gap-3">
                 @for (opzione of creditiOpzioni; track opzione) {
                 <button type="button" (click)="onScegliCrediti(opzione)"
-                    class="rounded-xl border-2 py-5 text-center text-lg font-extrabold transition"
+                    class="rounded-xl border-2 py-5 text-center text-lg font-extrabold transition cursor-pointer"
                     [ngClass]="creditiBase() === opzione ? 'border-blue-600 bg-blue-50 text-slate-800' : 'border-slate-200 text-slate-600 hover:border-slate-300'">
                     {{ opzione }}
                 </button>
@@ -48,13 +46,15 @@
             <div class="mb-5 flex items-center justify-center gap-4">
                 <button type="button" (click)="onNumeroPartecipantiChange(-1)"
                     [disabled]="numeroPartecipanti() <= partecipantiMin"
-                    class="h-9 w-9 rounded-full border border-slate-300 text-lg font-bold text-slate-600 disabled:opacity-30">
+                    class="h-9 w-9 rounded-full border border-slate-300 text-lg font-bold text-slate-600 
+                    disabled:opacity-30 cursor-pointer">
                     −
                 </button>
                 <span class="w-10 text-center text-2xl font-extrabold text-slate-800">{{ numeroPartecipanti() }}</span>
                 <button type="button" (click)="onNumeroPartecipantiChange(1)"
                     [disabled]="numeroPartecipanti() >= partecipantiMax"
-                    class="h-9 w-9 rounded-full border border-slate-300 text-lg font-bold text-slate-600 disabled:opacity-30">
+                    class="h-9 w-9 rounded-full border border-slate-300 cursor-pointer
+                    text-lg font-bold text-slate-600 disabled:opacity-30">
                     +
                 </button>
             </div>
@@ -72,28 +72,31 @@
         </div>
 
         <div class="flex items-center justify-between border-t border-slate-100 px-6 py-4">
-            <button type="button" (click)="onAnnulla()"
-                class="text-sm font-semibold text-slate-500 hover:text-slate-700">
-                Annulla
+            <button type="button" (click)="onBackHome()"
+                class="text-sm font-semibold text-slate-500 hover:text-slate-700 cursor-pointer">
+                Home Page
             </button>
 
             <div class="flex gap-2">
                 @if (step() > 1) {
                 <button type="button" (click)="onIndietro()"
-                    class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">
+                    class="rounded-lg border border-slate-200 cursor-pointer
+                    px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">
                     Indietro
                 </button>
                 }
 
                 @if (step() < 3) { <button type="button" (click)="onAvanti()"
                     [disabled]="(step() === 1 && !step1Valido()) || (step() === 2 && !step2Valido())"
-                    class="rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-30">
+                    class="rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold cursor-pointer
+                    text-white transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-30">
                     Avanti
                     </button>
                     } @else {
                     <button type="button" (click)="onSalva()" [disabled]="!step3Valido()"
-                        class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-30">
-                        Salva
+                        class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-bold 
+                        text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-30 cursor-pointer">
+                        Avvia Asta Live
                     </button>
                     }
             </div>

@@ -1,7 +1,12 @@
 <div class="min-h-screen bg-blue-950">
     <section class="asta-stage relative overflow-hidden bg-linear-to-b from-blue-900 to-blue-950 px-4 py-12 sm:py-16">
+
         <!-- Etichetta + timer, insieme in alto a destra -->
-        <div class="absolute right-4 top-4 flex items-center gap-3 sm:right-6 sm:top-6">
+        <div class="absolute top-4 left-4 right-4 flex items-center gap-3 sm:right-6 sm:top-6 justify-between">
+            <button type="button" (click)="onIndietroClick()" class="flex bg-gray-300 hover:bg-gray-500 hover:text-white cursor-pointer font-semibold
+                backdrop-blur-md transition-all border border-white/10 items-center gap-2 rounded-xl px-4 py-1">
+                Indietro
+            </button>
             <span class="rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.25em] text-white">
                 Asta Fantacalcio
             </span>
@@ -10,7 +15,7 @@
             </div>
         </div>
 
-        <div class="mx-auto flex max-w-md flex-col items-center gap-6">
+        <div class="mx-auto flex w-full max-w-2xl flex-col items-center gap-6 pt-5">
             <!-- Giocatori rimanenti + Svincolati: visibili solo ad asta avviata -->
             @if (asta.astaAvviata()) {
             <div class="flex w-full flex-col gap-3 sm:flex-row">
@@ -42,8 +47,9 @@
             }
 
             @if (asta.giocatoreCorrente(); as giocatore) {
-            <app-player-card [giocatore]="giocatore" [coaches]="asta.coaches()" [tipoAsta]="tipoAstaAttuale()"
-                [errore]="asta.ultimoErrore()" (scarta)="onScarta()" (assegna)="onAssegna($event)" />
+            <app-player-card class="block w-full" [giocatore]="giocatore" [coaches]="asta.coaches()"
+                [tipoAsta]="tipoAstaAttuale()" [errore]="asta.ultimoErrore()" (scarta)="onScarta()"
+                (assegna)="onAssegna($event)" />
             } @else if (asta.astaTerminata()) {
             <div
                 class="flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-white/5 px-8 py-10 text-center">
@@ -55,11 +61,6 @@
                     Esporta rose in CSV
                 </button>
             </div>
-            } @else {
-            <button type="button" (click)="onApriSetup()"
-                class="rounded-2xl bg-white px-10 py-5 text-lg font-extrabold uppercase tracking-wide text-blue-900 shadow-xl shadow-blue-950/50 transition hover:bg-blue-50 active:scale-[0.98]">
-                Avvia asta random
-            </button>
             }
         </div>
 
@@ -102,5 +103,30 @@
 </div>
 
 @if (mostraModaleSetup()) {
-<app-asta-setup-modal (salva)="onSalvaSetup($event)" (annulla)="onAnnullaSetup()" />
+<!-- (annulla)="onAnnullaSetup() -->
+<app-asta-setup-modal (salva)="onSalvaSetup($event)" (backHome)="onBackHome()" />
+}
+
+<!-- STEP 7b: modale di conferma uscita — bianca, coerente con le altre modali dell'app -->
+@if (mostraModaleIndietro()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" (click)="onAnnullaIndietro()">
+    <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl" (click)="$event.stopPropagation()">
+        <h4 class="text-base font-bold text-slate-800">Tornare alla home?</h4>
+        <p class="mt-2 text-sm text-slate-500">
+            Una volta tornato indietro non sarà più possibile recuperare i dati di questa asta:
+            giocatori estratti, assegnazioni e crediti andranno persi definitivamente.
+        </p>
+
+        <div class="mt-5 flex gap-3">
+            <button type="button" (click)="onAnnullaIndietro()"
+                class="flex-1 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 cursor-pointer">
+                Annulla
+            </button>
+            <button type="button" (click)="onConfermaIndietro()"
+                class="flex-1 rounded-xl bg-rose-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-rose-500 cursor-pointer">
+                Torna alla home
+            </button>
+        </div>
+    </div>
+</div>
 }
