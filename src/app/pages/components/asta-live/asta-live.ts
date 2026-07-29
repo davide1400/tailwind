@@ -22,7 +22,8 @@ const COLONNE_GRIGLIA: Record<number, string> = {
   9: 'lg:grid-cols-5',
   10: 'lg:grid-cols-5',
   11: 'lg:grid-cols-6',
-  12: 'lg:grid-cols-6',
+  12: 'lg:grid-cols-6 2xl:grid-cols-12',
+
 };
 
 @Component({
