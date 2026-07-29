@@ -1,43 +1,32 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, effect, input, output, signal } from '@angular/core';
-import { AssegnazionePayload, Coach, Player, Ruolo } from '../model/player.model';
+import { CommonModule } from '@angular/common';
+import { AssegnazionePayload, Coach, Player, TipoAsta } from '../model/player.model';
+import { getChipsRuolo } from '../data/ruoli';
 
-interface RuoloConfig {
-  label: string;
-  badge: string;
-  glow: string;
-}
-
-const RUOLO_CONFIG: Record<Ruolo, RuoloConfig> = {
-  POR: { label: 'Portiere', badge: 'bg-amber-400 text-amber-950', glow: 'shadow-amber-400/40' },
-  DIF: { label: 'Difensore', badge: 'bg-sky-500 text-sky-50', glow: 'shadow-sky-500/40' },
-  CEN: { label: 'Centrocampista', badge: 'bg-emerald-500 text-emerald-50', glow: 'shadow-emerald-500/40' },
-  ATT: { label: 'Attaccante', badge: 'bg-rose-600 text-rose-50', glow: 'shadow-rose-600/40' },
-};
 
 type Fase = 'iniziale' | 'scegli-squadra' | 'inserisci-crediti';
 
-
 @Component({
   selector: 'app-player-card',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './player-card.html',
   styleUrl: './player-card.css',
 })
-
 export class PlayerCard {
-  
   giocatore = input.required<Player>();
   coaches = input.required<Coach[]>();
+  tipoAsta = input.required<TipoAsta>();
   errore = input<string | null>(null);
 
   scarta = output<void>();
   assegna = output<AssegnazionePayload>();
 
-  protected readonly ruoloConfig = RUOLO_CONFIG;
   protected readonly fase = signal<Fase>('iniziale');
   protected readonly squadraSelezionata = signal<Coach | null>(null);
   protected readonly creditiInseriti = signal<number | null>(null);
+
+  protected readonly chipsRuolo = computed(() => getChipsRuolo(this.giocatore(), this.tipoAsta()));
 
   protected readonly erroreCrediti = computed(() => {
     const squadra = this.squadraSelezionata();
@@ -53,7 +42,6 @@ export class PlayerCard {
   );
 
   constructor() {
-    // ogni volta che cambia il giocatore estratto, riparti da zero con la selezione
     effect(() => {
       this.giocatore();
       this.fase.set('iniziale');
@@ -97,5 +85,4 @@ export class PlayerCard {
 
     this.assegna.emit({ coachId: squadra.id, crediti });
   }
-
 }

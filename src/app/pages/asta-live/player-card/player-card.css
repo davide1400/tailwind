@@ -11,7 +11,7 @@
     top: 50%;
     width: 1.5rem;
     height: 1.5rem;
-    background: var(--asta-page-bg, #071a13);
+    background: var(--asta-page-bg, #172554);
     border-radius: 9999px;
     transform: translateY(-50%);
 }

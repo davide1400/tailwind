@@ -1,3 +1,14 @@
 .asta-stage {
-    --asta-page-bg: #0b3d2e;
+  --asta-page-bg: #172554; /* blue-950: usato dalla tacca della ticket-card del giocatore */
+}
+
+/* Tocco calcistico, ora in tonalità blu invece che verde, per restare in tema */
+.pitch-pattern {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(96, 165, 250, 0.06) 0px,
+    rgba(96, 165, 250, 0.06) 48px,
+    transparent 48px,
+    transparent 96px
+  );
 }

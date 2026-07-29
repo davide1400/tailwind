@@ -5,7 +5,7 @@
 
 ul {
     scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 transparent;
+    scrollbar-color: #1e3a8a transparent;
 }
 
 ul::-webkit-scrollbar {
@@ -13,6 +13,6 @@ ul::-webkit-scrollbar {
 }
 
 ul::-webkit-scrollbar-thumb {
-    background-color: #cbd5e1;
+    background-color: #1e3a8a;
     border-radius: 9999px;
 }

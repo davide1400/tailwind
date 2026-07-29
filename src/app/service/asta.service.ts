@@ -1,9 +1,7 @@
-import { Injectable, computed, signal } from '@angular/core';
-import { Coach, CREDITI_INIZIALI, Player, SLOT_ALTRI, SLOT_PORTIERI, TeamRoster, TipoSlot } from '../pages/asta-live/model/player.model';
-import { MOCK_PLAYERS } from '../pages/asta-live/mock/mock-player';
-
-
-const NUMERO_FANTALLENATORI = 12;
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { PlayersRepository } from './players-repository.service';
+import { AstaConfig, Coach, Player, RosterSlot, SLOT_ALTRI, SLOT_PORTIERI, TeamRoster, TipoAsta, TipoSlot } from '../pages/asta-live/model/player.model';
+import { giocaComePortiere, ruoloClassicoDi } from '../pages/asta-live/data/ruoli';
 
 function creaRosterVuoto(coachId: number): TeamRoster {
     return {
@@ -11,14 +9,6 @@ function creaRosterVuoto(coachId: number): TeamRoster {
         portieri: Array(SLOT_PORTIERI).fill(null),
         altri: Array(SLOT_ALTRI).fill(null),
     };
-}
-
-function creaFantallenatori(): Coach[] {
-    return Array.from({ length: NUMERO_FANTALLENATORI }, (_, i) => ({
-        id: i + 1,
-        nome: `Fantallenatore ${i + 1}`,
-        creditiResidui: CREDITI_INIZIALI,
-    }));
 }
 
 /** Fisher-Yates: mescola un array senza mutare l'originale. */
@@ -33,17 +23,19 @@ function mescola<T>(array: T[]): T[] {
 
 @Injectable({ providedIn: 'root' })
 export class AstaService {
+    private readonly playersRepository = inject(PlayersRepository);
+
     // --- Stato privato -------------------------------------------------
-    private readonly _coaches = signal<Coach[]>(creaFantallenatori());
+    private readonly _coaches = signal<Coach[]>([]);
     private readonly _codaGiocatori = signal<Player[]>([]);
     private readonly _giocatoreCorrente = signal<Player | null>(null);
     private readonly _svincolati = signal<Player[]>([]);
-    private readonly _rosters = signal<Record<number, TeamRoster>>(
-        Object.fromEntries(creaFantallenatori().map((c) => [c.id, creaRosterVuoto(c.id)])),
-    );
+    private readonly _rosters = signal<Record<number, TeamRoster>>({});
     private readonly _ultimoErrore = signal<string | null>(null);
     private readonly _astaAvviata = signal(false);
     private readonly _dataInizio = signal<number | null>(null);
+    private readonly _tipoAsta = signal<TipoAsta | null>(null);
+    private readonly _giocatoriTotali = signal(0);
 
     // --- Stato pubblico in sola lettura ---------------------------------
     readonly coaches = this._coaches.asReadonly();
@@ -53,6 +45,8 @@ export class AstaService {
     readonly ultimoErrore = this._ultimoErrore.asReadonly();
     readonly astaAvviata = this._astaAvviata.asReadonly();
     readonly dataInizio = this._dataInizio.asReadonly();
+    readonly tipoAsta = this._tipoAsta.asReadonly();
+    readonly giocatoriTotali = this._giocatoriTotali.asReadonly();
 
     readonly giocatoriRimasti = computed(
         () => this._codaGiocatori().length + (this._giocatoreCorrente() ? 1 : 0),
@@ -61,15 +55,38 @@ export class AstaService {
         () => this._astaAvviata() && this._codaGiocatori().length === 0 && this._giocatoreCorrente() === null,
     );
 
+    /** % di giocatori ancora da assegnare/scartare rispetto al totale del mazzo iniziale. */
+    readonly percentualeRimanenti = computed(() => {
+        const totale = this._giocatoriTotali();
+        return totale === 0 ? 0 : (this.giocatoriRimasti() / totale) * 100;
+    });
+
+    /** % di svincolati rispetto al totale del mazzo iniziale. */
+    readonly percentualeSvincolati = computed(() => {
+        const totale = this._giocatoriTotali();
+        return totale === 0 ? 0 : (this._svincolati().length / totale) * 100;
+    });
+
     // --- Azioni ----------------------------------------------------------
 
-    /** Mescola tutti i giocatori, estrae il primo e fa partire il cronometro. */
-    avviaAsta(): void {
+    /** Configura i fantallenatori/crediti in base alla modale di setup, mescola il mazzo e parte. */
+    avviaAsta(config: AstaConfig): void {
         if (this._astaAvviata()) return;
 
-        const mescolati = mescola(MOCK_PLAYERS);
+        const coaches: Coach[] = config.nomiPartecipanti.map((nome, i) => ({
+            id: i + 1,
+            nome,
+            creditiResidui: config.creditiBase,
+        }));
+
+        this._coaches.set(coaches);
+        this._rosters.set(Object.fromEntries(coaches.map((c) => [c.id, creaRosterVuoto(c.id)])));
+        this._tipoAsta.set(config.tipo);
+
+        const mescolati = mescola(this.playersRepository.getGiocatori());
         const [primo, ...resto] = mescolati;
 
+        this._giocatoriTotali.set(mescolati.length);
         this._codaGiocatori.set(resto);
         this._giocatoreCorrente.set(primo ?? null);
         this._astaAvviata.set(true);
@@ -87,10 +104,7 @@ export class AstaService {
         this.avanzaProssimo();
     }
 
-    /**
-     * Assegna il giocatore corrente al fantallenatore scelto per un certo numero di crediti,
-     * scala il residuo e passa in automatico al giocatore successivo.
-     */
+    /** Assegna il giocatore corrente a un fantallenatore per un certo numero di crediti. */
     assegnaGiocatore(coachId: number, crediti: number): void {
         const giocatore = this._giocatoreCorrente();
         if (!giocatore) return;
@@ -99,7 +113,7 @@ export class AstaService {
         const coachAttuale = this._coaches().find((c) => c.id === coachId);
         if (!rosterAttuale || !coachAttuale) return;
 
-        const isPortiere = giocatore.ruolo === 'POR';
+        const isPortiere = giocaComePortiere(giocatore);
         const slotAttuali = isPortiere ? rosterAttuale.portieri : rosterAttuale.altri;
         const indiceLibero = slotAttuali.findIndex((slot) => slot === null);
 
@@ -144,10 +158,7 @@ export class AstaService {
         this.avanzaProssimo();
     }
 
-    /**
-     * Rimuove un giocatore da una rosa: libera lo slot, rimborsa i crediti (totali o metà per
-     * difetto) e rimette il giocatore tra gli svincolati.
-     */
+    /** Rimuove un giocatore da una rosa, rimborsa i crediti e lo rimette tra gli svincolati. */
     rimuoviGiocatore(coachId: number, tipoSlot: TipoSlot, indice: number, rimborsoTotale: boolean): void {
         const roster = this._rosters()[coachId];
         const coach = this._coaches().find((c) => c.id === coachId);
@@ -178,9 +189,42 @@ export class AstaService {
     }
 
     /**
-     * Estrae il prossimo giocatore dalla coda. Se la coda è vuota ma ci sono svincolati,
-     * li rimette in gioco rimescolandoli prima di continuare (fine "giro" dell'asta).
+     * Genera il CSV con tutte le rose assegnate, in un formato compatibile con l'import
+     * su Leghe Fantacalcio (una riga per giocatore, con la fantasquadra per l'abbinamento
+     * manuale richiesto dalla piattaforma in fase di caricamento).
+     *
+     * ATTENZIONE: Leghe Fantacalcio non pubblica uno schema colonne ufficiale verificabile;
+     * questo formato è un best-effort basato sugli standard più diffusi. Verifica con un
+     * import di prova prima di affidartici per un'asta reale.
      */
+    esportaCsv(): string {
+        const tipo = this._tipoAsta() ?? 'classic';
+        const righe: string[] = ['Squadra Fantacalcio;Ruolo;Nome;Squadra;Costo'];
+
+        for (const coach of this._coaches()) {
+            const roster = this._rosters()[coach.id];
+            if (!roster) continue;
+
+            const tutti = [...roster.portieri, ...roster.altri].filter(
+                (s): s is RosterSlot => s !== null,
+            );
+
+            for (const slot of tutti) {
+                const ruolo =
+                    tipo === 'mantra'
+                        ? slot.player.ruoli.map((r) => r.toUpperCase()).join('/')
+                        : ruoloClassicoDi(slot.player.ruoli[0]);
+
+                righe.push(
+                    `${coach.nome};${ruolo};${slot.player.nome} ${slot.player.cognome};${slot.player.squadra};${slot.crediti}`,
+                );
+            }
+        }
+
+        return righe.join('\n');
+    }
+
+    /** Estrae il prossimo giocatore dalla coda; se vuota ma ci sono svincolati, li rimescola. */
     private avanzaProssimo(): void {
         let coda = this._codaGiocatori();
 
@@ -205,13 +249,15 @@ export class AstaService {
 
     /** Utile per un pulsante "reset asta" o per test manuali. */
     reset(): void {
-        this._coaches.set(creaFantallenatori());
+        this._coaches.set([]);
         this._codaGiocatori.set([]);
         this._giocatoreCorrente.set(null);
         this._svincolati.set([]);
-        this._rosters.set(Object.fromEntries(this._coaches().map((c) => [c.id, creaRosterVuoto(c.id)])));
+        this._rosters.set({});
         this._ultimoErrore.set(null);
         this._astaAvviata.set(false);
         this._dataInizio.set(null);
+        this._tipoAsta.set(null);
+        this._giocatoriTotali.set(0);
     }
 }
