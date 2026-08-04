@@ -1,0 +1,62 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" (click)="onBackdropClick()">
+    <div class="w-full max-w-lg rounded-2xl bg-white shadow-2xl" (click)="$event.stopPropagation()">
+        <div class="border-b border-indigo-100 px-6 py-4">
+            <p class="text-xs font-semibold uppercase tracking-widest text-indigo-400">Riepilogo scambio</p>
+            <h3 class="mt-1 text-base font-bold text-slate-800">
+                {{ riepilogo().squadraSinistra.nome }} ↔ {{ riepilogo().squadraDestra.nome }}
+            </h3>
+            <!-- STEP 5b: chip in evidenza con i crediti totali coinvolti nello scambio -->
+            <span
+                class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">
+                Crediti totali coinvolti: {{ totaleCreditiScambio() }}
+            </span>
+        </div>
+
+        <div class="max-h-[60vh] overflow-y-auto px-6 py-5">
+            <p class="mb-2 text-xs font-bold uppercase tracking-wide text-emerald-600">
+                {{ riepilogo().squadraSinistra.nome }} riceve
+            </p>
+            <ul class="mb-5 space-y-2">
+                @for (voce of riepilogo().cedutiDaDestra; track voce.giocatore.id) {
+                <li class="flex items-center justify-between rounded-lg bg-emerald-50 px-3 py-2">
+                    <div>
+                        <p class="text-sm font-semibold text-slate-800">{{ voce.giocatore.nome }} {{
+                            voce.giocatore.cognome }}</p>
+                        <p class="text-xs text-slate-400">Prima valeva {{ voce.giocatore.crediti }} cr</p>
+                    </div>
+                    <span class="rounded-full bg-emerald-600 px-2.5 py-1 text-sm font-bold text-white">{{
+                        voce.nuoviCrediti }} cr</span>
+                </li>
+                }
+            </ul>
+
+            <p class="mb-2 text-xs font-bold uppercase tracking-wide text-indigo-600">
+                {{ riepilogo().squadraDestra.nome }} riceve
+            </p>
+            <ul class="space-y-2">
+                @for (voce of riepilogo().cedutiDaSinistra; track voce.giocatore.id) {
+                <li class="flex items-center justify-between rounded-lg bg-indigo-50 px-3 py-2">
+                    <div>
+                        <p class="text-sm font-semibold text-slate-800">{{ voce.giocatore.nome }} {{
+                            voce.giocatore.cognome }}</p>
+                        <p class="text-xs text-slate-400">Prima valeva {{ voce.giocatore.crediti }} cr</p>
+                    </div>
+                    <span class="rounded-full bg-indigo-600 px-2.5 py-1 text-sm font-bold text-white">{{
+                        voce.nuoviCrediti }} cr</span>
+                </li>
+                }
+            </ul>
+        </div>
+
+        <div class="flex justify-end gap-3 border-t border-indigo-100 px-6 py-4">
+            <button type="button" (click)="annulla.emit()" [disabled]="caricamento()"
+                class="rounded-lg bg-rose-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-rose-500 disabled:cursor-not-allowed disabled:opacity-50">
+                Annulla
+            </button>
+            <button type="button" (click)="conferma.emit()" [disabled]="caricamento()"
+                class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
+                {{ caricamento() ? 'Salvataggio…' : 'Conferma operazione' }}
+            </button>
+        </div>
+    </div>
+</div>

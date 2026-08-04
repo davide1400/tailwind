@@ -1,0 +1,44 @@
+<!--
+  STEP 2: rimosso l'intero blocco "In uscita" con le trade-player-card duplicate — era
+  ridondante perché la selezione è già visibile tramite il bordo evidenziato dentro il
+  picker. Le selezioni NON vengono perse quando chiudi il picker: sono nel service
+  (ScambiService), non nello stato locale di questo componente, quindi "chiudi lista
+  giocatori" (mostraPicker -> false) nasconde solo la vista, non tocca la selezione.
+-->
+<div
+    class="flex h-full flex-col gap-3 rounded-2xl border border-blue-300/40 bg-gradient-to-br from-blue-400/20 via-blue-500/10 to-blue-600/5 p-4 shadow-xl shadow-blue-500/10 backdrop-blur-xl">
+    <div>
+        <label class="mb-1 block text-xs font-bold uppercase tracking-wide text-blue-800">{{ titolo() }}</label>
+        <select [value]="squadraSelezionata()?.id ?? ''" (change)="onSquadraChange($event)"
+            class="w-full rounded-lg border border-blue-200 bg-white/80 px-3 py-2 text-sm font-semibold text-slate-800 outline-none backdrop-blur-sm focus:border-blue-500">
+            <option value="">Seleziona una squadra…</option>
+            @for (squadra of squadre(); track squadra.id) {
+            <option [value]="squadra.id">{{ squadra.nome }}</option>
+            }
+        </select>
+    </div>
+
+    @if (squadraSelezionata()) {
+    <button type="button" (click)="onTogglePicker()"
+        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-500">
+        {{ mostraPicker() ? 'Chiudi lista giocatori' : 'Cedi giocatore' }}
+    </button>
+
+    @if (mostraPicker()) {
+    <div class="flex-1 overflow-y-auto rounded-lg border border-blue-200/50 p-2">
+        @if (limiteRaggiunto()) {
+        <p class="mb-2 rounded-md bg-amber-50 px-2 py-1.5 text-xs font-medium text-amber-700">
+            Hai raggiunto il massimo di {{ maxGiocatori() }} giocatori per questo scambio.
+        </p>
+        }
+        <div class="flex flex-col gap-2">
+            @for (giocatore of squadraSelezionata()!.rosa; track giocatore.id) {
+            <app-trade-player-card [giocatore]="giocatore" [selezionabile]="true"
+                [selezionato]="isSelezionato(giocatore)" [disabilitato]="limiteRaggiunto() && !isSelezionato(giocatore)"
+                (selezionaClick)="onSelezionaGiocatore(giocatore)" />
+            }
+        </div>
+    </div>
+    }
+    }
+</div>

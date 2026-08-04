@@ -1,0 +1,33 @@
+<!--
+  Pill bianca semi-opaca: leggibile sia su sfondi scuri (es. stage blu dell'asta) sia
+  su sfondi chiari (es. bg-indigo-500/10 di home/scambi), senza bisogno di varianti.
+-->
+<button type="button" (click)="onClick()"
+    class="flex items-center gap-1.5 rounded-full bg-white/90 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-slate-700 shadow-md backdrop-blur-sm transition hover:bg-white">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+        <path fill-rule="evenodd"
+            d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z"
+            clip-rule="evenodd" />
+    </svg>
+    Indietro
+</button>
+
+@if (mostraModale()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" (click)="onAnnulla()">
+    <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl" (click)="$event.stopPropagation()">
+        <h4 class="text-base font-bold text-slate-800">Tornare alla home?</h4>
+        <p class="mt-2 text-sm text-slate-500">{{ confirmMessage() }}</p>
+
+        <div class="mt-5 flex gap-3">
+            <button type="button" (click)="onAnnulla()"
+                class="flex-1 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
+                Annulla
+            </button>
+            <button type="button" (click)="onConferma()"
+                class="flex-1 rounded-xl bg-rose-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-rose-500">
+                Torna alla home
+            </button>
+        </div>
+    </div>
+</div>
+}

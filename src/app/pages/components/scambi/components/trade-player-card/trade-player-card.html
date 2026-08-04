@@ -1,0 +1,59 @@
+<!--
+  STEP 3: card giocatore ridisegnata in tonalità rosso con effetto "liquid glass"
+  (sfondo semi-trasparente + backdrop-blur + bordo chiaro sottile). Il rosso qui non è
+  legato al ruolo (quello resta nei chip colorati sotto), è il colore identificativo
+  di "questo giocatore sta per essere ceduto".
+-->
+<div (click)="onClick()"
+    class="flex flex-col overflow-hidden rounded-xl border backdrop-blur-xl transition-colors duration-200" [ngClass]="[
+    selezionato()
+      ? 'border-rose-200 ring-2 ring-rose-300/60 bg-gradient-to-br from-rose-500/35 via-rose-600/20 to-rose-700/10'
+      : 'border-rose-300/30 bg-gradient-to-br from-rose-500/15 via-rose-600/10 to-rose-700/5',
+    selezionabile() && !disabilitato() ? 'cursor-pointer hover:border-rose-200' : '',
+    disabilitato() && !selezionato() ? 'cursor-not-allowed opacity-40' : ''
+  ]">
+    <div class="flex items-center gap-3 p-3">
+        <img [src]="giocatore().immagineUrl" [alt]="giocatore().nome + ' ' + giocatore().cognome"
+            class="h-12 w-12 shrink-0 rounded-full border-2 border-white/30 object-cover" />
+        <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-bold uppercase text-white">{{ giocatore().cognome }}</p>
+            <div class="mt-1 flex flex-wrap gap-1">
+                @for (ruolo of giocatore().ruoliMantra; track ruolo) {
+                <span class="rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none"
+                    [ngClass]="ruoliInfo[ruolo].badge">
+                    {{ ruolo }}
+                </span>
+                }
+            </div>
+        </div>
+        @if (selezionato()) {
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+            class="h-5 w-5 shrink-0 text-white">
+            <path fill-rule="evenodd"
+                d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                clip-rule="evenodd" />
+        </svg>
+        }
+    </div>
+
+    <div class="h-px bg-white/15"></div>
+
+    <div class="grid grid-cols-4 gap-1 px-3 py-2 text-center">
+        <div>
+            <p class="text-[10px] uppercase text-rose-100/70">Gol</p>
+            <p class="text-sm font-bold text-white">{{ giocatore().statistiche.gol }}</p>
+        </div>
+        <div>
+            <p class="text-[10px] uppercase text-rose-100/70">Assist</p>
+            <p class="text-sm font-bold text-white">{{ giocatore().statistiche.assist }}</p>
+        </div>
+        <div>
+            <p class="text-[10px] uppercase text-rose-100/70">Media</p>
+            <p class="text-sm font-bold text-white">{{ giocatore().statistiche.mediaVoto }}</p>
+        </div>
+        <div>
+            <p class="text-[10px] uppercase text-rose-100/70">FM</p>
+            <p class="text-sm font-bold text-amber-200">{{ giocatore().statistiche.fantaMedia }}</p>
+        </div>
+    </div>
+</div>

@@ -1,1 +1,34 @@
-<p>scambi works!</p>
+<div class="relative min-h-screen bg-indigo-500/10 px-4 py-8">
+    <div class="absolute left-4 top-4">
+        <app-back-button />
+    </div>
+
+    @if (scambioCompletato()) {
+    <div
+        class="mx-auto mb-6 max-w-5xl rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center text-sm font-semibold text-emerald-700">
+        Scambio completato con successo.
+    </div>
+    }
+
+    <div class="mx-auto grid max-w-6xl grid-cols-1 gap-4 pt-10 lg:grid-cols-[1fr_320px_1fr]">
+        <app-team-trade-panel titolo="Squadra 1" [squadre]="scambi.squadreDisponibiliSinistra()"
+            [squadraSelezionata]="scambi.squadraSinistra()" [giocatoriCeduti]="scambi.cedutiDaSinistra()"
+            [maxGiocatori]="scambi.maxGiocatoriPerLato" (squadraChange)="onSquadraSinistraChange($event)"
+            (toggleGiocatore)="onToggleGiocatoreSinistra($event)" />
+
+        <app-trade-summary [nomeSquadraSinistra]="scambi.squadraSinistra()?.nome ?? null"
+            [nomeSquadraDestra]="scambi.squadraDestra()?.nome ?? null" [cedutiDaSinistra]="scambi.cedutiDaSinistra()"
+            [cedutiDaDestra]="scambi.cedutiDaDestra()" [scambioValido]="scambi.scambioValido()"
+            (accetta)="onAccettaScambio()" (annulla)="onAnnullaScambio()" />
+
+        <app-team-trade-panel titolo="Squadra 2" [squadre]="scambi.squadreDisponibiliDestra()"
+            [squadraSelezionata]="scambi.squadraDestra()" [giocatoriCeduti]="scambi.cedutiDaDestra()"
+            [maxGiocatori]="scambi.maxGiocatoriPerLato" (squadraChange)="onSquadraDestraChange($event)"
+            (toggleGiocatore)="onToggleGiocatoreDestra($event)" />
+    </div>
+</div>
+
+@if (riepilogoAperto(); as riepilogo) {
+<app-trade-confirm-modal [riepilogo]="riepilogo" [caricamento]="caricamento()" (conferma)="onConfermaOperazione()"
+    (annulla)="onAnnullaModale()" />
+}

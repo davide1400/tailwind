@@ -1,0 +1,67 @@
+<div class="flex h-full flex-col gap-4 rounded-2xl border border-indigo-200 bg-white p-4">
+    <p class="text-center text-xs font-bold uppercase tracking-wide text-indigo-700">Riepilogo scambio</p>
+
+    @if (!nomeSquadraSinistra() || !nomeSquadraDestra()) {
+    <p class="flex-1 text-center text-sm text-slate-400">
+        Seleziona entrambe le squadre per iniziare a comporre lo scambio.
+    </p>
+    } @else {
+    <!--
+      STEP 4: grafica semplificata — solo immagine + cognome per ogni giocatore,
+      incolonnati verticalmente sotto la propria squadra. Al centro l'icona di scambio
+      a due colori: arco superiore verde (chi entra), arco inferiore rosso (chi esce).
+    -->
+    <div class="flex flex-1 items-center justify-center gap-4">
+        <div class="flex flex-1 flex-col items-center gap-3">
+            <p class="truncate text-[11px] font-semibold uppercase text-slate-400">{{ nomeSquadraSinistra() }}</p>
+            @if (cedutiDaSinistra().length === 0) {
+            <p class="text-xs italic text-slate-300">--</p>
+            } @else {
+            @for (giocatore of cedutiDaSinistra(); track giocatore.id) {
+            <div class="flex flex-col items-center gap-1">
+                <img [src]="giocatore.immagineUrl" [alt]="giocatore.cognome"
+                    class="h-12 w-12 rounded-full border-2 border-rose-300 object-cover" />
+                <p class="text-xs font-bold uppercase text-slate-700">{{ giocatore.cognome }}</p>
+            </div>
+            }
+            }
+        </div>
+
+        <!-- Icona swap: path superiore verde con freccia, path inferiore rosso con freccia -->
+        <svg viewBox="0 0 24 24" class="h-10 w-10 shrink-0" aria-hidden="true">
+            <path d="M4 9a8 8 0 0 1 13.6-4.36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                class="text-emerald-500" />
+            <polygon points="17.6,3 20.4,6 15.3,6.6" class="fill-emerald-500" />
+            <path d="M20 15a8 8 0 0 1-13.6 4.36" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" class="text-rose-500" />
+            <polygon points="6.4,21 3.6,18 8.7,17.4" class="fill-rose-500" />
+        </svg>
+
+        <div class="flex flex-1 flex-col items-center gap-3">
+            <p class="truncate text-[11px] font-semibold uppercase text-slate-400">{{ nomeSquadraDestra() }}</p>
+            @if (cedutiDaDestra().length === 0) {
+            <p class="text-xs italic text-slate-300">--</p>
+            } @else {
+            @for (giocatore of cedutiDaDestra(); track giocatore.id) {
+            <div class="flex flex-col items-center gap-1">
+                <img [src]="giocatore.immagineUrl" [alt]="giocatore.cognome"
+                    class="h-12 w-12 rounded-full border-2 border-blue-300 object-cover" />
+                <p class="text-xs font-bold uppercase text-slate-700">{{ giocatore.cognome }}</p>
+            </div>
+            }
+            }
+        </div>
+    </div>
+    }
+
+    <div class="flex justify-end gap-2">
+        <button type="button" (click)="annulla.emit()"
+            class="rounded-lg bg-rose-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-rose-500">
+            Annulla scambio
+        </button>
+        <button type="button" (click)="accetta.emit()" [disabled]="!scambioValido()"
+            class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-40">
+            Accetta scambio
+        </button>
+    </div>
+</div>

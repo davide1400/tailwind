@@ -26,6 +26,9 @@ export const routes: Routes = [
             {
                 path: "scambi",
                 component: Scambi,
+                data: {
+                    nascondiMenu: true,
+                }
             }
         ]
     }
