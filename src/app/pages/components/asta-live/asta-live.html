@@ -87,10 +87,10 @@
     <!-- Rose fantallenatori: solo quando l'asta è stata creata -->
     @if (asta.astaAvviata()) {
     <section class="pitch-pattern px-4 py-10">
-        <div class="mx-auto mb-6 max-w-7xl">
+        <div class="mx-auto mb-6 w-full">
             <h2 class="text-lg font-bold uppercase tracking-wide text-white">Rose fantallenatori</h2>
         </div>
-        <div class="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3" [ngClass]="classiGriglia()">
+        <div class="mx-auto grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3" [ngClass]="classiGriglia()">
             @for (coach of asta.coaches(); track coach.id) {
             <div class="h-120">
                 <app-team-table [coach]="coach" [roster]="asta.rosters()[coach.id]" [tipoAsta]="tipoAstaAttuale()"
