@@ -45,15 +45,13 @@
             <p class="mb-3 text-sm font-semibold text-slate-700">Numero di partecipanti</p>
             <div class="mb-5 flex items-center justify-center gap-4">
                 <button type="button" (click)="onNumeroPartecipantiChange(-1)"
-                    [disabled]="numeroPartecipanti() <= partecipantiMin"
-                    class="h-9 w-9 rounded-full border border-slate-300 text-lg font-bold text-slate-600 
+                    [disabled]="numeroPartecipanti() <= partecipantiMin" class="h-9 w-9 rounded-full border border-slate-300 text-lg font-bold text-slate-600 
                     disabled:opacity-30 cursor-pointer">
                     −
                 </button>
                 <span class="w-10 text-center text-2xl font-extrabold text-slate-800">{{ numeroPartecipanti() }}</span>
                 <button type="button" (click)="onNumeroPartecipantiChange(1)"
-                    [disabled]="numeroPartecipanti() >= partecipantiMax"
-                    class="h-9 w-9 rounded-full border border-slate-300 cursor-pointer
+                    [disabled]="numeroPartecipanti() >= partecipantiMax" class="h-9 w-9 rounded-full border border-slate-300 cursor-pointer
                     text-lg font-bold text-slate-600 disabled:opacity-30">
                     +
                 </button>
@@ -72,23 +70,18 @@
         </div>
 
         <div class="flex items-center justify-between border-t border-slate-100 px-6 py-4">
-            <button type="button" (click)="onBackHome()"
-                class="text-sm font-semibold text-slate-500 hover:text-slate-700 cursor-pointer">
-                Home Page
-            </button>
+            <app-back-button></app-back-button>
 
             <div class="flex gap-2">
                 @if (step() > 1) {
-                <button type="button" (click)="onIndietro()"
-                    class="rounded-lg border border-slate-200 cursor-pointer
+                <button type="button" (click)="onIndietro()" class="rounded-lg border border-slate-200 cursor-pointer
                     px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">
                     Indietro
                 </button>
                 }
 
                 @if (step() < 3) { <button type="button" (click)="onAvanti()"
-                    [disabled]="(step() === 1 && !step1Valido()) || (step() === 2 && !step2Valido())"
-                    class="rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold cursor-pointer
+                    [disabled]="(step() === 1 && !step1Valido()) || (step() === 2 && !step2Valido())" class="rounded-lg bg-slate-800 px-4 py-2 text-sm font-semibold cursor-pointer
                     text-white transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-30">
                     Avanti
                     </button>

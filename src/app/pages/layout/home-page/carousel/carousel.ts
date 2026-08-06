@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './carousel.css',
 })
 export class Carousel {
-
+  
 }

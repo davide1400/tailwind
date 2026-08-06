@@ -1,14 +1,14 @@
 import { Component, computed, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AstaConfig, CREDITI_OPZIONI, PARTECIPANTI_MAX, PARTECIPANTI_MIN, TipoAsta } from '../asta-live/model/player.model';
-
+import { BackButton } from "../../../shared/back-button/back-button";
 
 type Step = 1 | 2 | 3;
 
 @Component({
   selector: 'app-asta-setup-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BackButton],
   templateUrl: './asta-setup-modal.html',
   styleUrl: './asta-setup-modal.css',
 })
