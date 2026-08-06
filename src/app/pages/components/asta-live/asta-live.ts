@@ -6,6 +6,7 @@ import { TeamTable } from './team-table/team-table';
 import { AstaSetupModal } from '../asta-setup-modal/asta-setup-modal';
 import { AstaService } from '../../../service/asta.service';
 import { AssegnazionePayload, AstaConfig, TipoSlot } from './model/player.model';
+import { BackButton } from "../../../shared/back-button/back-button";
 
 
 function formattaDurata(ms: number): string {
@@ -29,7 +30,7 @@ const COLONNE_GRIGLIA: Record<number, string> = {
 @Component({
   selector: 'app-asta-live',
   standalone: true,
-  imports: [CommonModule, PlayerCard, TeamTable, AstaSetupModal],
+  imports: [CommonModule, PlayerCard, TeamTable, AstaSetupModal, BackButton],
   templateUrl: './asta-live.html',
   styleUrl: './asta-live.css',
   // STEP 6a: PUNTO CHIAVE. Con questo "providers", Angular crea una NUOVA istanza di
