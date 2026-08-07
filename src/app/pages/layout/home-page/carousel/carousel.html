@@ -1,1 +1,87 @@
-<p>carousel works!</p>
+<div class="mx-auto max-w-4xl">
+    <h2 class="mb-4 text-lg font-bold uppercase tracking-wide text-indigo-900">
+        Ultime notizie · Mercato e Serie A
+    </h2>
+
+    @if (servizio.caricamento()) {
+    <div class="flex justify-center gap-2 rounded-2xl bg-white/60 py-10">
+        @for (n of [1, 2, 3]; track n) {
+        <div class="h-40 w-1/3 animate-pulse rounded-xl bg-indigo-200/50"></div>
+        }
+    </div>
+    } @else if (servizio.errore()) {
+    <div class="rounded-2xl bg-rose-50 px-4 py-6 text-center text-sm font-medium text-rose-600">
+        {{ servizio.errore() }}
+        <button type="button" (click)="servizio.ricarica()" class="ml-2 underline">Riprova</button>
+    </div>
+    } @else if (servizio.numeroNotizie() === 0) {
+    <p class="rounded-2xl bg-white/60 px-4 py-6 text-center text-sm text-slate-500">
+        Nessuna notizia disponibile al momento.
+    </p>
+    } @else {
+    <div class="flex items-center gap-3">
+        <!-- Freccia indietro -->
+        <button type="button" (click)="onIndietro()" [disabled]="!puoAndareIndietro()"
+            class="shrink-0 rounded-full bg-white p-2 text-indigo-600 shadow-md transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-30"
+            aria-label="Notizie precedenti">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+                <path fill-rule="evenodd"
+                    d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z"
+                    clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <!-- Le 3 card della pagina corrente -->
+        <div class="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-3">
+            @for (notizia of notizieVisibili(); track notizia.url) {
+            <a
+            [href]="notizia.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex h-full flex-col overflow-hidden rounded-xl border-2 border-transparent bg-white shadow-sm
+            transition-colors duration-200 hover:border-indigo-500 hover:shadow-md"
+            >
+            <div class="aspect-video w-full shrink-0 overflow-hidden bg-indigo-100">
+                @if (notizia.immagineUrl) {
+                <img [src]="notizia.immagineUrl" [alt]="notizia.titolo"
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                } @else {
+                <div class="flex h-full items-center justify-center text-xs font-semibold uppercase text-indigo-300">
+                    {{ notizia.fonte }}
+                </div>
+                }
+            </div>
+
+            <div class="flex flex-1 flex-col gap-1 p-3">
+                <p class="line-clamp-2 text-sm font-bold text-slate-800">{{ notizia.titolo }}</p>
+                <p class="line-clamp-2 flex-1 text-xs text-slate-500">{{ notizia.descrizione }}</p>
+                <div class="mt-2 flex items-center justify-between text-[10px] font-semibold uppercase text-indigo-400">
+                    <span class="truncate">{{ notizia.fonte }}</span>
+                    <span class="shrink-0">{{ formattaData(notizia.pubblicatoIl) }}</span>
+                </div>
+            </div>
+            </a>
+            }
+        </div>
+
+        <!-- Freccia avanti -->
+        <button type="button" (click)="onAvanti()" [disabled]="!puoAndareAvanti()"
+            class="shrink-0 rounded-full bg-white p-2 text-indigo-600 shadow-md transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-30"
+            aria-label="Notizie successive">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+                <path fill-rule="evenodd"
+                    d="M7.21 14.77a.75.75 0 0 1 .02-1.06L11.168 10 7.23 6.29a.75.75 0 1 1 1.04-1.08l4.5 4.25a.75.75 0 0 1 0 1.08l-4.5 4.25a.75.75 0 0 1-1.06-.02Z"
+                    clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Indicatori pagina -->
+    <div class="mt-4 flex justify-center gap-1.5">
+        @for (p of indicatorePagine(); track $index) {
+        <span class="h-1.5 w-6 rounded-full transition-colors"
+            [ngClass]="$index === pagina() ? 'bg-indigo-600' : 'bg-indigo-200'"></span>
+        }
+    </div>
+    }
+</div>
